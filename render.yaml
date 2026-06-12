@@ -102,7 +102,7 @@ services:
       - key: AUTH_SERVICE_PORT
         value: "3001"
       - key: DATABASE_URL
-        sync: 'postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/auth_db?sslmode=require'          # paste AUTH_DATABASE_URL from your .env
+        sync: "postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/auth_db?sslmode=require"          # paste AUTH_DATABASE_URL from your .env
       - key: JWT_ACCESS_SECRET
         sync: false
       - key: JWT_REFRESH_SECRET
