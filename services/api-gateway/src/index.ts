@@ -23,8 +23,8 @@ app.set('trust proxy', 1);
 app.use(helmet());
 app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:5173', credentials: true }));
 app.use(generalLimiter);
-app.use(authMiddleware);
 
+// Auth routes bypass JWT check entirely
 app.use(
   '/api/auth',
   authLimiter,
@@ -34,6 +34,8 @@ app.use(
     pathRewrite: { '^/api/auth': '' },
   })
 );
+
+app.use(authMiddleware);
 
 app.use(
   '/api/users',
