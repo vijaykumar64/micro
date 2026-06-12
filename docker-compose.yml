@@ -1,0 +1,179 @@
+x-dns: &default-dns
+  dns:
+    - 8.8.8.8
+    - 1.1.1.1
+
+services:
+  # ── Backend Services ───────────────────────────────────────────────────────
+  auth-service:
+    <<: *default-dns
+    build:
+      context: ./services/auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      AUTH_SERVICE_PORT: 3001
+      DATABASE_URL: ${AUTH_DATABASE_URL}
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      INTERNAL_SERVICE_SECRET: ${INTERNAL_SERVICE_SECRET}
+      USER_SERVICE_URL: http://user-service:3002
+
+  user-service:
+    <<: *default-dns
+    build:
+      context: ./services/user-service
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      USER_SERVICE_PORT: 3002
+      DATABASE_URL: ${USER_DATABASE_URL}
+      INTERNAL_SERVICE_SECRET: ${INTERNAL_SERVICE_SECRET}
+
+  dashboard-service:
+    <<: *default-dns
+    build:
+      context: ./services/dashboard-service
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+    environment:
+      DASHBOARD_SERVICE_PORT: 3003
+      DATABASE_URL: ${DASHBOARD_DATABASE_URL}
+      INTERNAL_SERVICE_SECRET: ${INTERNAL_SERVICE_SECRET}
+      USER_SERVICE_URL: http://user-service:3002
+      PROPERTY_SERVICE_URL: http://property-service:3005
+      VERIFICATION_SERVICE_URL: http://verification-service:3006
+      WORK_ITEMS_SERVICE_URL: http://work-items-service:3007
+
+  file-service:
+    <<: *default-dns
+    build:
+      context: ./services/file-service
+      dockerfile: Dockerfile
+    ports:
+      - "3004:3004"
+    environment:
+      FILE_SERVICE_PORT: 3004
+      DATABASE_URL: ${FILE_DATABASE_URL}
+      INTERNAL_SERVICE_SECRET: ${INTERNAL_SERVICE_SECRET}
+      DASHBOARD_SERVICE_URL: http://dashboard-service:3003
+      FILE_UPLOAD_DIR: /app/uploads
+      FILE_MAX_SIZE_BYTES: 10485760
+    volumes:
+      - file_uploads:/app/uploads
+
+  property-service:
+    <<: *default-dns
+    build:
+      context: ./services/property-service
+      dockerfile: Dockerfile
+    ports:
+      - "3005:3005"
+    environment:
+      PROPERTY_SERVICE_PORT: 3005
+      DATABASE_URL: ${PROPERTY_DATABASE_URL}
+      INTERNAL_SERVICE_SECRET: ${INTERNAL_SERVICE_SECRET}
+
+  verification-service:
+    <<: *default-dns
+    build:
+      context: ./services/verification-service
+      dockerfile: Dockerfile
+    ports:
+      - "3006:3006"
+    environment:
+      VERIFICATION_SERVICE_PORT: 3006
+      DATABASE_URL: ${VERIFICATION_DATABASE_URL}
+      INTERNAL_SERVICE_SECRET: ${INTERNAL_SERVICE_SECRET}
+
+  work-items-service:
+    <<: *default-dns
+    build:
+      context: ./services/work-items-service
+      dockerfile: Dockerfile
+    ports:
+      - "3007:3007"
+    environment:
+      WORK_ITEMS_SERVICE_PORT: 3007
+      DATABASE_URL: ${WORK_ITEMS_DATABASE_URL}
+      INTERNAL_SERVICE_SECRET: ${INTERNAL_SERVICE_SECRET}
+
+  notification-service:
+    <<: *default-dns
+    build:
+      context: ./services/notification-service
+      dockerfile: Dockerfile
+    ports:
+      - "3008:3008"
+    environment:
+      NOTIFICATION_SERVICE_PORT: 3008
+      DATABASE_URL: ${NOTIFICATION_DATABASE_URL}
+      INTERNAL_SERVICE_SECRET: ${INTERNAL_SERVICE_SECRET}
+
+  audit-service:
+    <<: *default-dns
+    build:
+      context: ./services/audit-service
+      dockerfile: Dockerfile
+    ports:
+      - "3009:3009"
+    environment:
+      AUDIT_SERVICE_PORT: 3009
+      DATABASE_URL: ${AUDIT_DATABASE_URL}
+      INTERNAL_SERVICE_SECRET: ${INTERNAL_SERVICE_SECRET}
+
+  api-gateway:
+    <<: *default-dns
+    build:
+      context: ./services/api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      GATEWAY_PORT: 3000
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost}
+      RATE_LIMIT_WINDOW_MS: 900000
+      RATE_LIMIT_MAX: 100
+      AUTH_SERVICE_URL: http://auth-service:3001
+      USER_SERVICE_URL: http://user-service:3002
+      DASHBOARD_SERVICE_URL: http://dashboard-service:3003
+      FILE_SERVICE_URL: http://file-service:3004
+      PROPERTY_SERVICE_URL: http://property-service:3005
+      VERIFICATION_SERVICE_URL: http://verification-service:3006
+      WORK_ITEMS_SERVICE_URL: http://work-items-service:3007
+      NOTIFICATION_SERVICE_URL: http://notification-service:3008
+      AUDIT_SERVICE_URL: http://audit-service:3009
+    depends_on:
+      - auth-service
+      - user-service
+      - dashboard-service
+      - file-service
+      - property-service
+      - verification-service
+      - work-items-service
+      - notification-service
+      - audit-service
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - api-gateway
+
+volumes:
+  file_uploads:
+
+networks:
+  default:
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: "172.28.0.0/16"
+        - subnet: "fd00::/80"

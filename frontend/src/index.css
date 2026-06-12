@@ -1,0 +1,74 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background: #f8fafc;
+  color: #1e293b;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12) !important;
+}
+
+button {
+  font-family: inherit;
+  transition: opacity 0.15s, transform 0.1s, background-color 0.15s;
+}
+
+button:not(:disabled):hover { opacity: 0.9; }
+button:not(:disabled):active { transform: translateY(1px); }
+
+.btn-primary:hover { background-color: #4f46e5 !important; opacity: 1 !important; }
+.btn-danger:hover { background-color: #dc2626 !important; color: #fff !important; opacity: 1 !important; }
+.btn-secondary:hover { background-color: #cbd5e1 !important; opacity: 1 !important; }
+
+.nav-link:hover { background: #273549 !important; color: #e2e8f0 !important; }
+
+.card-hover { transition: box-shadow 0.15s, transform 0.15s; }
+.card-hover:hover { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1) !important; transform: translateY(-2px); }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+@keyframes pulse-opacity {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease infinite;
+  border-radius: 6px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.unread-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6366f1;
+  animation: blink 2s ease infinite;
+}

@@ -1,0 +1,281 @@
+services:
+
+  # ─────────────────────────────────────────────────────────────────
+  # Frontend  (Static Site — always on, no cold start, FREE)
+  # ─────────────────────────────────────────────────────────────────
+  - type: web
+    name: micro-arc-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: micro-arc-gateway
+          property: url
+
+  # ─────────────────────────────────────────────────────────────────
+  # API Gateway
+  # ─────────────────────────────────────────────────────────────────
+  - type: web
+    name: micro-arc-gateway
+    runtime: docker
+    rootDir: services/api-gateway
+    dockerfilePath: Dockerfile
+    plan: free
+    envVars:
+      - key: GATEWAY_PORT
+        value: "3000"
+      - key: RATE_LIMIT_WINDOW_MS
+        value: "900000"
+      - key: RATE_LIMIT_MAX
+        value: "100"
+      - key: JWT_ACCESS_SECRET
+        sync: false
+      - key: CORS_ORIGIN
+        fromService:
+          type: web
+          name: micro-arc-frontend
+          property: url
+      - key: AUTH_SERVICE_URL
+        fromService:
+          type: web
+          name: micro-arc-auth
+          property: url
+      - key: USER_SERVICE_URL
+        fromService:
+          type: web
+          name: micro-arc-user
+          property: url
+      - key: DASHBOARD_SERVICE_URL
+        fromService:
+          type: web
+          name: micro-arc-dashboard
+          property: url
+      - key: FILE_SERVICE_URL
+        fromService:
+          type: web
+          name: micro-arc-file
+          property: url
+      - key: PROPERTY_SERVICE_URL
+        fromService:
+          type: web
+          name: micro-arc-property
+          property: url
+      - key: VERIFICATION_SERVICE_URL
+        fromService:
+          type: web
+          name: micro-arc-verification
+          property: url
+      - key: WORK_ITEMS_SERVICE_URL
+        fromService:
+          type: web
+          name: micro-arc-work-items
+          property: url
+      - key: NOTIFICATION_SERVICE_URL
+        fromService:
+          type: web
+          name: micro-arc-notification
+          property: url
+      - key: AUDIT_SERVICE_URL
+        fromService:
+          type: web
+          name: micro-arc-audit
+          property: url
+
+  # ─────────────────────────────────────────────────────────────────
+  # Auth Service
+  # ─────────────────────────────────────────────────────────────────
+  - type: web
+    name: micro-arc-auth
+    runtime: docker
+    rootDir: services/auth-service
+    dockerfilePath: Dockerfile
+    plan: free
+    envVars:
+      - key: AUTH_SERVICE_PORT
+        value: "3001"
+      - key: DATABASE_URL
+        sync: false          # paste AUTH_DATABASE_URL from your .env
+      - key: JWT_ACCESS_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
+      - key: INTERNAL_SERVICE_SECRET
+        sync: false
+      - key: USER_SERVICE_URL
+        fromService:
+          type: web
+          name: micro-arc-user
+          property: url
+
+  # ─────────────────────────────────────────────────────────────────
+  # User Service
+  # ─────────────────────────────────────────────────────────────────
+  - type: web
+    name: micro-arc-user
+    runtime: docker
+    rootDir: services/user-service
+    dockerfilePath: Dockerfile
+    plan: free
+    envVars:
+      - key: USER_SERVICE_PORT
+        value: "3002"
+      - key: DATABASE_URL
+        sync: false          # paste USER_DATABASE_URL from your .env
+      - key: INTERNAL_SERVICE_SECRET
+        sync: false
+
+  # ─────────────────────────────────────────────────────────────────
+  # Dashboard Service
+  # ─────────────────────────────────────────────────────────────────
+  - type: web
+    name: micro-arc-dashboard
+    runtime: docker
+    rootDir: services/dashboard-service
+    dockerfilePath: Dockerfile
+    plan: free
+    envVars:
+      - key: DASHBOARD_SERVICE_PORT
+        value: "3003"
+      - key: DATABASE_URL
+        sync: false          # paste DASHBOARD_DATABASE_URL from your .env
+      - key: INTERNAL_SERVICE_SECRET
+        sync: false
+      - key: USER_SERVICE_URL
+        fromService:
+          type: web
+          name: micro-arc-user
+          property: url
+      - key: PROPERTY_SERVICE_URL
+        fromService:
+          type: web
+          name: micro-arc-property
+          property: url
+      - key: VERIFICATION_SERVICE_URL
+        fromService:
+          type: web
+          name: micro-arc-verification
+          property: url
+      - key: WORK_ITEMS_SERVICE_URL
+        fromService:
+          type: web
+          name: micro-arc-work-items
+          property: url
+
+  # ─────────────────────────────────────────────────────────────────
+  # File Service  ⚠ Files are NOT persistent on the free tier.
+  # ─────────────────────────────────────────────────────────────────
+  - type: web
+    name: micro-arc-file
+    runtime: docker
+    rootDir: services/file-service
+    dockerfilePath: Dockerfile
+    plan: free
+    envVars:
+      - key: FILE_SERVICE_PORT
+        value: "3004"
+      - key: DATABASE_URL
+        sync: false          # paste FILE_DATABASE_URL from your .env
+      - key: INTERNAL_SERVICE_SECRET
+        sync: false
+      - key: DASHBOARD_SERVICE_URL
+        fromService:
+          type: web
+          name: micro-arc-dashboard
+          property: url
+      - key: FILE_UPLOAD_DIR
+        value: /app/uploads
+      - key: FILE_MAX_SIZE_BYTES
+        value: "10485760"
+
+  # ─────────────────────────────────────────────────────────────────
+  # Property Service
+  # ─────────────────────────────────────────────────────────────────
+  - type: web
+    name: micro-arc-property
+    runtime: docker
+    rootDir: services/property-service
+    dockerfilePath: Dockerfile
+    plan: free
+    envVars:
+      - key: PROPERTY_SERVICE_PORT
+        value: "3005"
+      - key: DATABASE_URL
+        sync: false          # paste PROPERTY_DATABASE_URL from your .env
+      - key: INTERNAL_SERVICE_SECRET
+        sync: false
+
+  # ─────────────────────────────────────────────────────────────────
+  # Verification Service
+  # ─────────────────────────────────────────────────────────────────
+  - type: web
+    name: micro-arc-verification
+    runtime: docker
+    rootDir: services/verification-service
+    dockerfilePath: Dockerfile
+    plan: free
+    envVars:
+      - key: VERIFICATION_SERVICE_PORT
+        value: "3006"
+      - key: DATABASE_URL
+        sync: false          # paste VERIFICATION_DATABASE_URL from your .env
+      - key: INTERNAL_SERVICE_SECRET
+        sync: false
+
+  # ─────────────────────────────────────────────────────────────────
+  # Work Items Service
+  # ─────────────────────────────────────────────────────────────────
+  - type: web
+    name: micro-arc-work-items
+    runtime: docker
+    rootDir: services/work-items-service
+    dockerfilePath: Dockerfile
+    plan: free
+    envVars:
+      - key: WORK_ITEMS_SERVICE_PORT
+        value: "3007"
+      - key: DATABASE_URL
+        sync: false          # paste WORK_ITEMS_DATABASE_URL from your .env
+      - key: INTERNAL_SERVICE_SECRET
+        sync: false
+
+  # ─────────────────────────────────────────────────────────────────
+  # Notification Service
+  # ─────────────────────────────────────────────────────────────────
+  - type: web
+    name: micro-arc-notification
+    runtime: docker
+    rootDir: services/notification-service
+    dockerfilePath: Dockerfile
+    plan: free
+    envVars:
+      - key: NOTIFICATION_SERVICE_PORT
+        value: "3008"
+      - key: DATABASE_URL
+        sync: false          # paste NOTIFICATION_DATABASE_URL from your .env
+      - key: INTERNAL_SERVICE_SECRET
+        sync: false
+
+  # ─────────────────────────────────────────────────────────────────
+  # Audit Service
+  # ─────────────────────────────────────────────────────────────────
+  - type: web
+    name: micro-arc-audit
+    runtime: docker
+    rootDir: services/audit-service
+    dockerfilePath: Dockerfile
+    plan: free
+    envVars:
+      - key: AUDIT_SERVICE_PORT
+        value: "3009"
+      - key: DATABASE_URL
+        sync: false          # paste AUDIT_DATABASE_URL from your .env
+      - key: INTERNAL_SERVICE_SECRET
+        sync: false
