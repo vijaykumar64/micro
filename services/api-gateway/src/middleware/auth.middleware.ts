@@ -7,7 +7,7 @@ interface JWTPayload {
   role: string;
 }
 
-const PUBLIC_PATHS = ['/api/auth/register', '/api/auth/login', '/api/auth/refresh'];
+const PUBLIC_PATHS = ['/api/auth/register', '/api/auth/login', '/api/auth/refresh', '/health'];
 
 export function authMiddleware(req: Request, res: Response, next: NextFunction) {
   if (PUBLIC_PATHS.some((p) => req.path.startsWith(p))) {
