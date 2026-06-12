@@ -102,7 +102,7 @@ services:
       - key: AUTH_SERVICE_PORT
         value: "3001"
       - key: DATABASE_URL
-        sync: postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/auth_db?sslmode=require          # paste AUTH_DATABASE_URL from your .env
+        sync: 'postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/auth_db?sslmode=require'          # paste AUTH_DATABASE_URL from your .env
       - key: JWT_ACCESS_SECRET
         sync: false
       - key: JWT_REFRESH_SECRET
@@ -128,7 +128,7 @@ services:
       - key: USER_SERVICE_PORT
         value: "3002"
       - key: DATABASE_URL
-        sync: postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/user_db?sslmode=require
+        sync: 'postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/user_db?sslmode=require'
           # paste USER_DATABASE_URL from your .env
       - key: INTERNAL_SERVICE_SECRET
         sync: false
@@ -146,7 +146,7 @@ services:
       - key: DASHBOARD_SERVICE_PORT
         value: "3003"
       - key: DATABASE_URL
-        sync:  postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/dashboard_db?sslmode=require          # paste DASHBOARD_DATABASE_URL from your .env
+        sync: 'postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/dashboard_db?sslmode=require'          # paste DASHBOARD_DATABASE_URL from your .env
       - key: INTERNAL_SERVICE_SECRET
         sync: false
       - key: USER_SERVICE_URL
@@ -183,7 +183,7 @@ services:
       - key: FILE_SERVICE_PORT
         value: "3004"
       - key: DATABASE_URL
-        sync: postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/file_db?sslmode=require
+        sync: 'postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/file_db?sslmode=require'
           # paste FILE_DATABASE_URL from your .env
       - key: INTERNAL_SERVICE_SECRET
         sync: false
@@ -210,7 +210,7 @@ services:
       - key: PROPERTY_SERVICE_PORT
         value: "3005"
       - key: DATABASE_URL
-        sync:  postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/property_db?sslmode=require          # paste PROPERTY_DATABASE_URL from your .env
+        sync: 'postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/property_db?sslmode=require'          # paste PROPERTY_DATABASE_URL from your .env
       - key: INTERNAL_SERVICE_SECRET
         sync: false
 
@@ -227,7 +227,7 @@ services:
       - key: VERIFICATION_SERVICE_PORT
         value: "3006"
       - key: DATABASE_URL
-        sync: postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/verification_db?sslmode=require          # paste VERIFICATION_DATABASE_URL from your .env
+        sync: 'postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/verification_db?sslmode=require'          # paste VERIFICATION_DATABASE_URL from your .env
       - key: INTERNAL_SERVICE_SECRET
         sync: false
 
@@ -244,7 +244,7 @@ services:
       - key: WORK_ITEMS_SERVICE_PORT
         value: "3007"
       - key: DATABASE_URL
-        sync: postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/work_items_db?sslmode=require          # paste WORK_ITEMS_DATABASE_URL from your .env
+        sync: 'postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/work_items_db?sslmode=require'          # paste WORK_ITEMS_DATABASE_URL from your .env
       - key: INTERNAL_SERVICE_SECRET
         sync: false
 
@@ -261,7 +261,7 @@ services:
       - key: NOTIFICATION_SERVICE_PORT
         value: "3008"
       - key: DATABASE_URL
-        sync:  postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/notification_db?sslmode=require          # paste NOTIFICATION_DATABASE_URL from your .env
+        sync: 'postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/notification_db?sslmode=require'          # paste NOTIFICATION_DATABASE_URL from your .env
       - key: INTERNAL_SERVICE_SECRET
         sync: false
 
@@ -278,6 +278,6 @@ services:
       - key: AUDIT_SERVICE_PORT
         value: "3009"
       - key: DATABASE_URL
-        sync: postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/audit_db?sslmode=require          # paste AUDIT_DATABASE_URL from your .env
+        sync: 'postgresql://neondb_owner:npg_dW2aB9uklnys@ep-misty-thunder-admy4rdm-pooler.c-2.us-east-1.aws.neon.tech/audit_db?sslmode=require'          # paste AUDIT_DATABASE_URL from your .env
       - key: INTERNAL_SERVICE_SECRET
         sync: false
