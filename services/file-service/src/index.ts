@@ -6,7 +6,7 @@ import { runMigrations } from './db/pool';
 import fileRoutes from './routes/file.routes';
 
 const app = express();
-const PORT = parseInt(process.env.FILE_SERVICE_PORT || '3004');
+const PORT = parseInt(process.env.PORT || '3004');
 
 app.use(helmet());
 app.use(cors());

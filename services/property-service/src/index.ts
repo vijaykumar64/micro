@@ -6,7 +6,7 @@ import { runMigrations } from './db/pool';
 import routes from './routes/property.routes';
 
 const app = express();
-const PORT = parseInt(process.env.PROPERTY_SERVICE_PORT || '3005');
+const PORT = parseInt(process.env.PORT || '3005');
 app.use(helmet()); app.use(cors()); app.use(express.json());
 app.get('/health', (_req, res) => res.json({ status: 'ok', service: 'property-service' }));
 app.use('/', routes);

@@ -6,7 +6,7 @@ import { runMigrations } from './db/pool';
 import dashboardRoutes from './routes/dashboard.routes';
 
 const app = express();
-const PORT = parseInt(process.env.DASHBOARD_SERVICE_PORT || '3003');
+const PORT = parseInt(process.env.PORT || '3003');
 
 app.use(helmet());
 app.use(cors());

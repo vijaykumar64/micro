@@ -6,7 +6,7 @@ import { runMigrations } from './db/pool';
 import authRoutes from './routes/auth.routes';
 
 const app = express();
-const PORT = parseInt(process.env.AUTH_SERVICE_PORT || '3001');
+const PORT = parseInt(process.env.PORT || '3001');
 
 app.use(helmet());
 app.use(cors());

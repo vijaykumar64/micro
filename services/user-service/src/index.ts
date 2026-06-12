@@ -6,7 +6,7 @@ import { runMigrations } from './db/pool';
 import userRoutes from './routes/user.routes';
 
 const app = express();
-const PORT = parseInt(process.env.USER_SERVICE_PORT || '3002');
+const PORT = parseInt(process.env.PORT || '3002');
 
 app.use(helmet());
 app.use(cors());

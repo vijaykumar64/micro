@@ -6,7 +6,7 @@ import { runMigrations } from './db/pool';
 import routes from './routes/verification.routes';
 
 const app = express();
-const PORT = parseInt(process.env.VERIFICATION_SERVICE_PORT || '3006');
+const PORT = parseInt(process.env.PORT || '3006');
 app.use(helmet()); app.use(cors()); app.use(express.json());
 app.get('/health', (_req, res) => res.json({ status: 'ok', service: 'verification-service' }));
 app.use('/', routes);

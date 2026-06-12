@@ -6,7 +6,7 @@ import { runMigrations } from './db/pool';
 import routes from './routes/work-items.routes';
 
 const app = express();
-const PORT = parseInt(process.env.WORK_ITEMS_SERVICE_PORT || '3007');
+const PORT = parseInt(process.env.PORT || '3007');
 app.use(helmet()); app.use(cors()); app.use(express.json());
 app.get('/health', (_req, res) => res.json({ status: 'ok', service: 'work-items-service' }));
 app.use('/', routes);
