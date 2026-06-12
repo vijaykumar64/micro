@@ -26,7 +26,7 @@ export async function updatePrefs(req: Request, res: Response) {
   try { ok(res, await svc.updatePreferences(req.headers['x-user-id'] as string, req.body)); } catch(e) { err(res, e); }
 }
 export async function internalSend(req: Request, res: Response) {
-  if (req.headers['x-internal-secret'] !== process.env.INTERNAL_SERVICE_SECRET) { res.status(403).json({ success: false, error: 'Forbidden' }); return; }
+  if (req.headers['x-internal-secret'] !== (process.env.INTERNAL_SERVICE_SECRET || 'internal_secret_dev')) { res.status(403).json({ success: false, error: 'Forbidden' }); return; }
   try {
     const { userId, type, title, message, metadata } = req.body;
     ok(res, await svc.sendNotification(userId, type, title, message, metadata), 201);

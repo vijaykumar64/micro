@@ -27,6 +27,6 @@ export async function updateStatus(req: Request, res: Response) {
   try { ok(res, await svc.updateStatus(req.params['id'], req.headers['x-user-id'] as string, req.headers['x-user-role'] as string, req.body.status)); } catch(e) { err(res, e); }
 }
 export async function internalCount(req: Request, res: Response) {
-  if (req.headers['x-internal-secret'] !== process.env.INTERNAL_SERVICE_SECRET) { res.status(403).json({ success: false, error: 'Forbidden' }); return; }
+  if (req.headers['x-internal-secret'] !== (process.env.INTERNAL_SERVICE_SECRET || 'internal_secret_dev')) { res.status(403).json({ success: false, error: 'Forbidden' }); return; }
   try { ok(res, { openCount: await svc.getOpenCount() }); } catch(e) { err(res, e); }
 }

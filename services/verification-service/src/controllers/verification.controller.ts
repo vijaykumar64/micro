@@ -24,6 +24,6 @@ export async function review(req: Request, res: Response) {
   try { ok(res, await svc.reviewRequest(req.params['id'], req.headers['x-user-id'] as string, req.headers['x-user-role'] as string, req.body.status, req.body.notes)); } catch(e) { err(res, e); }
 }
 export async function internalCount(req: Request, res: Response) {
-  if (req.headers['x-internal-secret'] !== process.env.INTERNAL_SERVICE_SECRET) { res.status(403).json({ success: false, error: 'Forbidden' }); return; }
+  if (req.headers['x-internal-secret'] !== (process.env.INTERNAL_SERVICE_SECRET || 'internal_secret_dev')) { res.status(403).json({ success: false, error: 'Forbidden' }); return; }
   try { ok(res, { pendingCount: await svc.getPendingCount() }); } catch(e) { err(res, e); }
 }

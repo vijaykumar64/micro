@@ -57,7 +57,7 @@ export async function deleteUserProfile(req: Request, res: Response) {
 
 export async function createInternalProfile(req: Request, res: Response) {
   const secret = req.headers['x-internal-secret'];
-  if (secret !== process.env.INTERNAL_SERVICE_SECRET) {
+  if (secret !== (process.env.INTERNAL_SERVICE_SECRET || 'internal_secret_dev')) {
     res.status(403).json({ success: false, error: 'Forbidden' });
     return;
   }
