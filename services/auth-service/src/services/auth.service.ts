@@ -24,15 +24,23 @@ export async function register(email: string, password: string, firstName?: stri
   );
   const user = result.rows[0];
 
-  try {
-    await axios.post(
-      `${USER_SERVICE_URL}/internal/profiles`,
-      { userId: user.id, firstName, lastName },
-      { headers: { 'x-internal-secret': INTERNAL_SECRET } }
-    );
-  } catch {
+  let profileCreated = false;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      await axios.post(
+        `${USER_SERVICE_URL}/internal/profiles`,
+        { userId: user.id, firstName, lastName },
+        { headers: { 'x-internal-secret': INTERNAL_SECRET }, timeout: 25000 }
+      );
+      profileCreated = true;
+      break;
+    } catch {
+      if (attempt < 3) await new Promise(r => setTimeout(r, 3000));
+    }
+  }
+  if (!profileCreated) {
     await query('DELETE FROM users WHERE id = $1', [user.id]);
-    throw new Error('Failed to create user profile');
+    throw new Error('User service unavailable — please try again in 30 seconds');
   }
 
   const payload: JWTPayload = { userId: user.id, email: user.email, role: user.role };
